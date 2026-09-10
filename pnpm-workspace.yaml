@@ -1,5 +1,0 @@
-# VitePress builds through esbuild, whose install script pnpm 11 will not run
-# unless it is named here - and refuses the install outright rather than
-# quietly skipping it.
-onlyBuiltDependencies:
-  - esbuild
