@@ -1,0 +1,51 @@
+name: Feature request
+description: Something Pitta should do and does not.
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        [`docs/06-ROADMAP.md`](https://github.com/shresthadeepesh/pitta-db/blob/main/docs/06-ROADMAP.md)
+        and [`docs/00-OVERVIEW.md`](https://github.com/shresthadeepesh/pitta-db/blob/main/docs/00-OVERVIEW.md)
+        say what is planned and what is deliberately out of scope. Worth a look
+        first — the answer may already be written down.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: >
+        What you are trying to do and where Pitta gets in the way. Describe the
+        situation rather than the feature — a good problem statement often has a
+        better solution than the one you came in with.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What you would like it to do
+    validations:
+      required: true
+
+  - type: textarea
+    id: workaround
+    attributes:
+      label: What you do today instead
+      description: Another tool, a hand-written query, giving up. Says how much this costs.
+
+  - type: dropdown
+    id: engine
+    attributes:
+      label: Which engines does this apply to?
+      multiple: true
+      options:
+        - PostgreSQL
+        - MySQL / MariaDB
+        - SQL Server
+        - SQLite
+        - MongoDB
+        - Redis
+        - All of them
+    validations:
+      required: true

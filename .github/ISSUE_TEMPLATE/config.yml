@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/shresthadeepesh/pitta-db/security/advisories/new
+    about: Report privately. Never in a public issue — see SECURITY.md.
+  - name: Question or idea
+    url: https://github.com/shresthadeepesh/pitta-db/discussions
+    about: For anything that is not yet a bug report or a concrete request.
+  - name: Documentation
+    url: https://github.com/shresthadeepesh/pitta-db/tree/main/docs
+    about: Architecture, the driver contract, the security requirements, and the ADRs.

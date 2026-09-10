@@ -1,0 +1,121 @@
+name: Bug report
+description: Something behaves incorrectly.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before filing: if this is a **security** issue, close this and use
+        [private reporting](https://github.com/shresthadeepesh/pitta-db/security/advisories/new)
+        instead.
+
+        Please do not paste real credentials, hostnames, or row data. Pitta's
+        logs are redacted, but a screenshot is not.
+
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what you got instead.
+      placeholder: |
+        Opened the data grid on a table with a composite primary key, edited one
+        cell, and clicked Apply. The preview showed the right UPDATE but the
+        apply reported "0 rows affected" and rolled back.
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: >
+        Numbered steps. If it needs a particular table, include the `CREATE
+        TABLE` — a reproduction that runs is worth more than a description.
+      value: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: engine
+    attributes:
+      label: Engine
+      options:
+        - PostgreSQL
+        - MySQL / MariaDB
+        - SQL Server
+        - SQLite
+        - MongoDB
+        - Redis
+        - Not engine-specific
+    validations:
+      required: true
+
+  - type: input
+    id: server-version
+    attributes:
+      label: Server version
+      description: >
+        As the server reports it — `select version()`, `db.version()`,
+        `INFO server`. "17" is fine; "latest" is not.
+      placeholder: PostgreSQL 17.2 on aarch64-apple-darwin
+    validations:
+      required: true
+
+  - type: input
+    id: pitta-version
+    attributes:
+      label: Pitta version
+      description: Printed at the top of **Pitta: Show Logs**, or in the Extensions view.
+      placeholder: 0.1.100
+    validations:
+      required: true
+
+  - type: input
+    id: vscode
+    attributes:
+      label: VS Code version and OS
+      description: From **Help → About**. Include the OS and architecture.
+      placeholder: 1.96.2, macOS 15.2 arm64
+    validations:
+      required: true
+
+  - type: dropdown
+    id: remote
+    attributes:
+      label: Where does the connection originate?
+      description: >
+        Pitta runs in the workspace extension host, so over Remote-SSH, WSL, or
+        a dev container the connection is made **from the remote**, not from
+        your laptop. This is the single most common source of "it works in psql
+        but not in Pitta".
+      options:
+        - Local
+        - Remote-SSH
+        - WSL
+        - Dev container
+        - GitHub Codespaces / vscode.dev
+      default: 0
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: >
+        **Pitta: Show Logs** with `pitta.logLevel` set to `debug`, from just
+        before the problem. Secrets are redacted by the logger; check anyway.
+      render: text
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I am on the latest version of Pitta.
+          required: true
+        - label: This report contains no credentials, no real hostnames, and no row data I mind sharing.
+          required: true

@@ -1,0 +1,65 @@
+name: Engine / driver request
+description: Support for a database Pitta does not speak yet.
+labels: [driver, enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Adding an engine is a new package under `packages/driver-*` and no edit
+        to core — that is enforced in CI. So this is a tractable contribution,
+        and [the authoring guide](https://github.com/shresthadeepesh/pitta-db/blob/main/docs/drivers/authoring.md)
+        exists to be followed by someone outside the project.
+
+        A driver is only called **supported** once it passes the conformance kit
+        against a real server in CI. That is the bar this issue is asking about.
+
+  - type: input
+    id: engine
+    attributes:
+      label: Engine
+      placeholder: ClickHouse / DuckDB / Cassandra / Elasticsearch / …
+    validations:
+      required: true
+
+  - type: input
+    id: client
+    attributes:
+      label: Node client library
+      description: >
+        Pure JavaScript strongly preferred — a native module would force a
+        per-platform VSIX (S6.3). Name the package and say which it is.
+      placeholder: "@clickhouse/client (pure JS)"
+    validations:
+      required: true
+
+  - type: textarea
+    id: shape
+    attributes:
+      label: How does it differ from what Pitta already models?
+      description: >
+        The contract stopped assuming SQL in Phase 11 — see
+        `docs/10-ENGINE-MODEL.md`. Useful things to say: is a statement text or
+        a structured command; are results rows or documents; can introspection
+        be a query or must it be imperative and paged; are there transactions;
+        can a running command be cancelled; is there a cursor.
+      value: |
+        - Statement language:
+        - Result shape:
+        - Introspection:
+        - Transactions:
+        - Cancellation:
+        - Cursors / streaming:
+    validations:
+      required: true
+
+  - type: dropdown
+    id: help
+    attributes:
+      label: Are you offering to write it?
+      options:
+        - "Yes — I want to write the driver"
+        - "I could test it against a real server"
+        - "No, requesting only"
+      default: 2
+    validations:
+      required: true
