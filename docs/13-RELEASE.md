@@ -96,6 +96,39 @@ hand-written file placed there vanishes from the VSIX while everything still
 builds and every test passes. The content assertions in `release.yml` and in
 `test/unit/manifest.test.ts` are what catch it.
 
+## 2a. The two repositories
+
+The extension is developed privately; everything a user needs is public, in
+[shresthadeepesh/pitta-db](https://github.com/shresthadeepesh/pitta-db).
+
+That split is not a preference. Someone who installs Pitta from the Marketplace
+cannot open an issue on a private repository, cannot read a `tree/main/docs`
+link, and cannot load a screenshot that `vsce` rewrote to `raw.githubusercontent`.
+GitHub Pages does not serve a private repository at all without a paid plan,
+which is why the docs site failed to deploy for as long as it was wired here.
+
+What lives where:
+
+| | Private (`pitta-db-extension`) | Public (`pitta-db`) |
+| --- | --- | --- |
+| Source, tests, releases | ✓ | |
+| `docs/` as written | ✓ | synced copy, on every push to main |
+| Documentation site | built as a link check | built and served at [shresthadeepesh.github.io/pitta-db](https://shresthadeepesh.github.io/pitta-db/) |
+| Issues, Discussions | for internal use | what the listing points at |
+| Demo clips for the listing | | `resources/demo/` |
+
+The manifest's `repository`, `bugs`, `homepage` and `qna` all name the public
+repository, so all four Marketplace links resolve for someone who has no access
+to the source. README screenshots use absolute URLs into it for the same
+reason: `vsce` resolves a relative path against `repository`, which would point
+at a path that does not exist there.
+
+`docs.yml` in this repository builds the site (a dead link fails the build) and
+then pushes `docs/` to the public repository, where its own workflow publishes
+Pages. That sync needs a **`PUBLIC_REPO_TOKEN`** secret with `contents: write`
+on `shresthadeepesh/pitta-db`; without it the job warns and the site keeps
+serving its last synced copy rather than failing the build.
+
 ## 3. The listing
 
 Both marketplaces render `packages/extension/README.md`. `vsce` rewrites relative

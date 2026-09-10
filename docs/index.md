@@ -6,7 +6,7 @@ hero:
   text: A database client that lives in VS Code
   tagline: Browse and edit your data in a grid, or write a query. Both are first-class, and you never leave the editor.
   image:
-    src: https://raw.githubusercontent.com/shresthadeepesh/pitta-db/main/packages/extension/resources/logo.png
+    src: /logo.png
     alt: Pitta
   actions:
     - theme: brand

@@ -10,8 +10,11 @@ import { defineConfig } from 'vitepress'
  * more useful to a contributor than a summary of them would be. Both are in the
  * nav, kept apart.
  *
- * GitHub Pages serves from a subpath, so the base is taken from the
- * environment: `DOCS_BASE=/pitta-db/ pnpm run docs:build`.
+ * The site is served from the public repository rather than from this one -
+ * Pages on a private repository needs a paid plan - so `docs/` is synced there
+ * on every push to main and built by its own workflow. Pages serves from a
+ * subpath, so the base is taken from the environment:
+ * `DOCS_BASE=/pitta-db/ pnpm run docs:build`.
  */
 export default defineConfig({
   title: 'Pitta',
@@ -26,11 +29,13 @@ export default defineConfig({
   ignoreDeadLinks: [/^\.\.\//, /^packages\//, /^test\//],
 
   head: [
-    ['link', { rel: 'icon', href: 'https://raw.githubusercontent.com/shresthadeepesh/pitta-db/main/resources/icon.png' }],
+    // `head` is emitted verbatim - VitePress rewrites the base into theme and
+    // frontmatter paths, but not into this - so the base is written in here.
+    ['link', { rel: 'icon', href: `${process.env.DOCS_BASE ?? '/'}icon.png` }],
   ],
 
   themeConfig: {
-    logo: 'https://raw.githubusercontent.com/shresthadeepesh/pitta-db/main/resources/icon.png',
+    logo: '/icon.png',
 
     nav: [
       { text: 'Guide', link: '/guide/getting-started' },
