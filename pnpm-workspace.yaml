@@ -1,0 +1,15 @@
+allowBuilds:
+  esbuild: set this to true or false
+
+# VitePress pulls in esbuild, whose install script pnpm 11 will not run unless
+# it is told to - and refuses the install outright rather than skipping it.
+#
+# The allowlist below is not what makes the install pass: pnpm 11.0.9 still
+# reports the script as ignored with it in place. `strictDepBuilds: false` is
+# what turns that refusal back into a warning, which is the same pair the
+# extension repository carries. The script itself is not needed: esbuild ships
+# its binary as an optional dependency, and the site builds without it.
+onlyBuiltDependencies:
+  - esbuild
+
+strictDepBuilds: false
