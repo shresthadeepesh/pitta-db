@@ -164,30 +164,51 @@ Listing fields live in `packages/extension/package.json`:
 
 ## 4. Demo clips
 
-Five clips, in `packages/extension/resources/demo/`. They are the listing's real
-copy — most people scroll the images and read nothing.
+Clips are the listing's real copy — most people scroll the images and read
+nothing. Six of them, recorded from a database that exists for this purpose.
 
-**Rules for all of them.** 1280×800 window, dark theme, editor font at 16px so it
-reads at listing size. No real hostnames, no real data — use `pnpm run db:up`,
-which seeds every engine. Under 8 seconds and under 2 MB each; if it does not
-fit, the clip is doing too much. No cursor teleporting: move, pause, click.
-Start on a clean editor, end on the result, no trailing idle frames.
+**Set up first.** `pnpm run db:up` starts the servers; `pnpm run demo:seed`
+loads `demo/seed.sql` into the Postgres 17 one. That schema is a shop —
+customers, products, orders, order items, a view, and an `archive_orders`
+procedure that reports progress with `RAISE NOTICE` — with twenty thousand
+orders, one index and not two, so the planner has a real choice to make and the
+grid has something to scroll. Do **not** record against the integration
+fixture: it contains `no_pk` and a column called `"select"` on purpose, which
+is what makes it a good test and a terrible thing to film.
+
+**Rules for all of them.** 1280×800 window, dark theme, editor font at 16px so
+it reads at listing size. No real hostnames, no real data. Under 8 seconds
+each; if it does not fit, the clip is doing too much. No cursor teleporting:
+move, pause, click. Start on a clean editor, end on the result, no trailing
+idle frames.
 
 | File | Scene |
 | --- | --- |
 | `connect.gif` | Add Connection → fill host/database/user → **Test Connection** → green → save → the tree expands to a table. Shows: the form is per-engine, secrets go to the keychain, it works before you have typed any SQL. |
-| `grid.gif` | Open Data on a table → filter a column → edit a cell → **Apply** shows the exact `UPDATE` with its key → confirm → the row updates. Shows: the SQL is never hidden, edits are staged. |
-| `query.gif` | Type `select … from ord` → completion offers the table → alias-aware column completion → run → results, timing, a streamed notice → cancel a slow one. Shows: real intelligence, real cancellation. |
-| `plan.gif` | **Explain** on a join → the plan diagram → hover a flagged node and read the reason. Shows: the plan view is a diagnosis, not a dump. |
-| `erd.gif` | **Show Schema Diagram** → the FK graph lays out → drag a table → filter to neighbours. Shows: the schema tooling exists. |
+| `grid.gif` | Open Data on `shop.order` → filter `status` → edit a cell → **Apply** shows the exact `UPDATE` with its key → confirm → the row updates. Shows: the SQL is never hidden, edits are staged. |
+| `query.gif` | Type `select … from ord` → completion offers the table → alias-aware column completion → run → results, timing → cancel a slow one. Shows: real intelligence, real cancellation. |
+| `plan.gif` | **Explain** on the `order`/`customer` join → the plan diagram → hover the flagged scan and read the reason. Shows: the plan view is a diagnosis, not a dump. |
+| `erd.gif` | **Show Schema Diagram** on `shop` → the FK graph lays out → drag a table → filter to neighbours. Shows: the schema tooling exists. |
+| `routine.gif` | **Edit Routine** on `archive_orders` → change the body → save → **Run Routine** → the argument form → notices arriving *while* it runs. Shows: the procedure workflow nobody else has in the editor. |
 
-Record with any screen recorder; convert with `ffmpeg` + `gifski` for a small
-palette-optimised file:
+**Converting.** Record with any screen recorder, then:
 
 ```bash
-ffmpeg -i connect.mov -vf "fps=15,scale=1280:-1:flags=lanczos" -f yuv4mpegpipe - \
-  | gifski -o connect.gif --fps 15 --quality 80 -
+pnpm run demo:clip -- recordings/query.mov
 ```
+
+That writes two files from one recording, because the two places that show them
+cannot share a format: `packages/extension/resources/demo/query.gif` for the
+Marketplace, which renders Markdown and will not play a video, and
+`docs/public/demo/query.mp4` for the docs site, which will — and which would
+otherwise make every reader download a GIF five to ten times the size. It fails
+rather than warns when the GIF is over 2 MB: a heavy clip on a listing is a
+blank space for anyone on a slow connection, and it renders fine on the machine
+that made it.
+
+The GIFs are committed here and excluded from the VSIX (`.vscodeignore`), and
+`docs.yml` mirrors them to the public repository, which is where
+`raw.githubusercontent` can actually read them from.
 
 ## 5. Pre-release channel
 
